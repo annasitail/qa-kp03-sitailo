@@ -64,6 +64,9 @@ class LogTextFile(File):
     def read_file(self):
         return "file content"
 
+    def append_line(self):
+        pass
+
 
 class BufferFile(File):
 
