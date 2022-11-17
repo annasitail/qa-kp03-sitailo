@@ -60,9 +60,6 @@ class BinaryFile(File):
         self.content = ""
 
     def create(self, parent, name, content):
-        # if parent == None:
-        #     print(parent.name + " was not set!")
-        #     return
         if len(parent.children) >= parent.MAX_DIR_SIZE:
             print(parent.name + " is full!")
             return
@@ -185,3 +182,38 @@ class BufferFile(File):
         if len(self.content) != 0:
             self.content.pop()
         print("Deleted successfully!")
+
+def display_structure(element):
+    structure = "[" + element.name
+    # if type(element) is Directory:
+    for e in element.children:
+        if type(e) is Directory:
+            structure += " - dir: " + display_structure(e)
+        else:
+            structure += " - file: " + e.name
+    structure += "]"
+    return structure
+
+root_dir = Directory()
+root_dir.create(None, "root", 20)
+child_dir_1 = Directory()
+child_dir_1.create(root_dir, "child_dir_1", 10)
+child_dir_2 = Directory()
+child_dir_2.create(root_dir, "child_dir_2", 5)
+
+binary_file_1 = BinaryFile()
+binary_file_1.create(child_dir_1, "binary_file_1", "This is something in the binary file")
+binary_file_2 = BinaryFile()
+binary_file_2.create(child_dir_2, "binary_file_2", "One more binary file and its content")
+
+log_text_file_1 = LogTextFile()
+log_text_file_1.create(root_dir, "log_text_file_1", "Content of the log text file")
+log_text_file_2 = LogTextFile()
+log_text_file_2.create(child_dir_2, "log_text_file_2", "Some text in the file")
+
+buffer_file_1 = BufferFile()
+buffer_file_1.create(child_dir_1, "buffer_file_1", 3)
+buffer_file_2 = BufferFile()
+buffer_file_2.create(root_dir, "buffer_file_2", 5)
+
+print("\n" + display_structure(root_dir))
